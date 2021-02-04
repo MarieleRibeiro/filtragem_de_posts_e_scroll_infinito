@@ -1,6 +1,6 @@
 const postsContainer = document.querySelector('#posts-container')
 const loaderContainer = document.querySelector('.loader')
-
+const filterInput = document.querySelector('#filter')
 
 //Primeira coisa é saber onde buscar/fazer uma requisição para obter os posts e para buscar esses postes precisamos saber para qual URL vai fazer essa requisição
 //*declarando uma variável que vai armazenar qual pagina vamos buscar. a principio recebe a primeira pagina
@@ -31,3 +31,34 @@ const addPostsIntoDom = async () => {
 }
 
 addPostsIntoDom()
+
+//PROPRIEDADES SCROLL
+//=> SCROLLTOP se fizer um scroll na pagina verificamos alguns numeros no console e esse numeros representam os pixels de distancia entre o topo e o topo visivel do documento
+//=> SCROLLHEIGHT dando um sroll na pagina mostra o tamanho em pixels da altura total desse documento  incluindo as partes não visiveis dele 
+//=> CLIENTHEIGHT o valor exibido no console representa um pixels a altura entre o topo e o final da parte visivel da pagina
+
+const getNextPosts = () => {
+  page++
+  addPostsIntoDom()
+}
+
+const removeLoader = () => {
+  setTimeout(() => {
+    loaderContainer.classList.remove('show')
+    getNextPosts()
+  }, 1000)
+}
+
+const showLoader = () => {
+  loaderContainer.classList.add('show')
+  removeLoader()
+}
+
+window.addEventListener('scroll', () => {
+  const { clientHeight, scrollHeight, scrollTop } = document.documentElement
+  const isPageBottmAlmostReached = scrollTop + clientHeight >= scrollHeight - 10
+
+  if (isPageBottmAlmostReached) {
+    showLoader()
+  }
+})
